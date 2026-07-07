@@ -334,7 +334,19 @@ body{font-family:var(--font-body);background:var(--color-bg);color:var(--text-pr
 
 /* ── RESP ── */
 @media(max-width:900px){
-  .sidebar{display:none;}
+  #mobile-menu-btn{display:block !important;}
+  .sidebar{
+    position:fixed;
+    top:0;
+    left:0;
+    height:100vh;
+    z-index:400;
+    transform:translateX(-100%);
+    transition:transform .25s ease;
+    box-shadow:8px 0 24px rgba(0,0,0,.15);
+  }
+  .sidebar.mobile-open{transform:translateX(0);}
+  #mobile-menu-backdrop.mobile-open{display:block;}
   .ds-page{padding:24px 20px 60px;}
 }
 
@@ -350,6 +362,9 @@ body{font-family:var(--font-body);background:var(--color-bg);color:var(--text-pr
 
 <!-- ══════════ HEADER ══════════ -->
 <header class="site-header">
+  <button id="mobile-menu-btn" onclick="toggleMobileMenu()" aria-label="Abrir menú" style="display:none;background:none;border:none;cursor:pointer;padding:6px;margin-right:2px;flex-shrink:0;">
+    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="var(--text-primary)" stroke-width="2" stroke-linecap="round"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+  </button>
   <div class="header-logo-svg" id="prisma-logo" style="width:104px;height:23px;cursor:pointer;user-select:none;" onclick="prismaLogoClick()">
 <svg width="104" height="23" viewBox="0 0 144 32" fill="none" xmlns="http://www.w3.org/2000/svg">
 <path d="M116.392 30.628H111L127.175 2.80005L143.35 30.628H125.326V25.8619H135.185L127.175 12.1785L116.392 30.628Z" fill="url(#headerLogoGradient3)"/>
@@ -415,7 +430,8 @@ body{font-family:var(--font-body);background:var(--color-bg);color:var(--text-pr
 <div class="layout">
 
 <!-- ══════════ SIDEBAR ══════════ -->
-<nav class="sidebar">
+<div id="mobile-menu-backdrop" onclick="closeMobileMenu()" style="display:none;position:fixed;inset:0;background:rgba(20,16,22,.5);z-index:399;"></div>
+<nav class="sidebar" id="sidebar">
 
   <div class="sb-group-label">Inicio</div>
   <div class="sb-item active" onclick="show('overview',this)"><span class="sb-item-icon"><svg fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg></span>Overview</div>
@@ -2428,6 +2444,15 @@ function show(key, el) {
   document.querySelectorAll('.sb-item').forEach(i => i.classList.remove('active'));
   if(el) el.classList.add('active');
   document.querySelector('.main').scrollTo({top:0, behavior:'smooth'});
+  closeMobileMenu();
+}
+function toggleMobileMenu(){
+  document.getElementById('sidebar').classList.toggle('mobile-open');
+  document.getElementById('mobile-menu-backdrop').classList.toggle('mobile-open');
+}
+function closeMobileMenu(){
+  document.getElementById('sidebar').classList.remove('mobile-open');
+  document.getElementById('mobile-menu-backdrop').classList.remove('mobile-open');
 }
 </script>
 </body>
